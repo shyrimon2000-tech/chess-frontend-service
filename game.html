@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chess — Game</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <nav class="navbar">
+    <span class="logo">♟ Chess</span>
+    <div class="nav-right">
+      <span class="username" id="nav-username"></span>
+      <a href="rooms.html" class="btn btn-secondary btn-sm">← Rooms</a>
+    </div>
+  </nav>
+
+  <div class="page-container">
+    <div class="game-layout">
+
+      <!-- Board -->
+      <div class="board-wrapper">
+        <div class="board-with-coords">
+          <div class="board-row-with-rank" id="board-row-8">
+            <span class="coord-rank" id="rank-8">8</span>
+            <!-- squares injected by JS -->
+          </div>
+          <!-- rows 7–1 injected by JS -->
+          <div class="coord-files" id="coord-files">
+            <!-- a–h labels injected by JS -->
+          </div>
+        </div>
+        <!-- The actual grid -->
+        <div id="chessboard"></div>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="game-sidebar">
+
+        <div class="status-bar">
+          <div class="status-row">
+            <span class="label">You</span>
+            <span class="value" id="my-color">—</span>
+          </div>
+          <div class="status-row">
+            <span class="label">Turn</span>
+            <span class="value" id="current-turn">—</span>
+          </div>
+          <div class="status-row">
+            <span class="label">Status</span>
+            <span class="value" id="game-status">—</span>
+          </div>
+        </div>
+
+        <!-- Game over banner -->
+        <div id="game-over-banner" class="banner">
+          <h3 id="game-over-title"></h3>
+          <p id="game-over-sub" class="text-muted"></p>
+          <button class="btn btn-primary mt-2" onclick="window.location.href='rooms.html'">Back to Rooms</button>
+        </div>
+
+        <!-- Disconnect banner -->
+        <div id="disconnect-banner" class="banner">
+          <h3>Opponent disconnected</h3>
+          <p id="disconnect-countdown" class="text-muted"></p>
+        </div>
+
+        <!-- Inline error -->
+        <div id="game-msg" class="msg msg-error"></div>
+
+        <div class="game-controls">
+          <button class="btn btn-danger" id="resign-btn">Resign</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/game.js"></script>
+</body>
+</html>

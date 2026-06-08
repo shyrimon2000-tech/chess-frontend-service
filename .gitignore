@@ -1,0 +1,6 @@
+k8s/
+.env
+nginx.*
+test_browser.py
+docker-compose.yml
+Dockerfile
