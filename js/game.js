@@ -105,7 +105,7 @@ function applyGameState(game) {
   if (!game) return;
 
   // Determine color once
-  if (!myColor && myUserId !== null) {
+  if ((!myColor || myColor === 'spectator') && myUserId !== null) {
     if (String(game.white_player_id) === String(myUserId)) {
       myColor = 'white';
     } else if (String(game.black_player_id) === String(myUserId)) {
