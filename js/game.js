@@ -73,7 +73,13 @@ function connectWS() {
       showGameMsg('Connection lost. Reconnecting… (' + reconnectAttempts + '/' + MAX_RECONNECT + ')', 'error');
       reconnectTimer = setTimeout(function() {
         if (e && e.code === 4001) {
-          tryRefresh().finally(connectWS);
+          tryRefresh().then(function(ok) {
+            if (ok) {
+              connectWS();
+            } else {
+              window.location.href = '/index.html';
+            }
+          });
         } else {
           connectWS();
         }
