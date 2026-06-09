@@ -21,8 +21,10 @@ var legalMoves  = [];   // array of UCI strings e.g. ["e2e3","e2e4"]
 var ws          = null;
 var lastMoveSrc = null;
 var lastMoveDst = null;
-var disconnectTimer = null;
-var reconnectTimer  = null;
+var disconnectTimer  = null;
+var reconnectTimer   = null;
+var reconnectAttempts = 0;
+var MAX_RECONNECT     = 10;
 
 // ── Init ──────────────────────────────────────────────────────
 (async function init() {
@@ -56,10 +58,19 @@ var reconnectTimer  = null;
 function connectWS() {
   clearTimeout(reconnectTimer);
   ws = connectGameWS(gameId, {
-    onOpen:  function() { clearGameMsg(); },
+    onOpen: function() {
+      reconnectAttempts = 0;
+      clearGameMsg();
+    },
     onClose: function(e) {
       if (gameOver) return;
-      showGameMsg('Connection lost. Reconnecting…', 'error');
+      reconnectAttempts++;
+      if (reconnectAttempts > MAX_RECONNECT) {
+        showGameMsg('Game no longer available. Redirecting to rooms…', 'error');
+        setTimeout(function() { window.location.href = '/rooms.html'; }, 3000);
+        return;
+      }
+      showGameMsg('Connection lost. Reconnecting… (' + reconnectAttempts + '/' + MAX_RECONNECT + ')', 'error');
       reconnectTimer = setTimeout(function() {
         if (e && e.code === 4001) {
           tryRefresh().finally(connectWS);
