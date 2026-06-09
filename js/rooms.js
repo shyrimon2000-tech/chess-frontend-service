@@ -175,7 +175,7 @@ function pollForGame(roomId) {
     } catch (_) {}
   }
   check();
-  pollInterval = setInterval(check, 2000);
+  pollInterval = setInterval(check, 300);
 }
 
 // ── Logout ────────────────────────────────────────────────────
