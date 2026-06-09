@@ -80,11 +80,19 @@ function handleWsMessage(msg) {
       break;
 
     case 'game_state':
+      if (msg.last_move) {
+        lastMoveSrc = msg.last_move.slice(0, 2);
+        lastMoveDst = msg.last_move.slice(2, 4);
+      }
       applyGameState(msg.game || msg);
       clearSelection();
       break;
 
     case 'game_over':
+      if (msg.last_move) {
+        lastMoveSrc = msg.last_move.slice(0, 2);
+        lastMoveDst = msg.last_move.slice(2, 4);
+      }
       applyGameState(msg.game || msg);
       break;
 
