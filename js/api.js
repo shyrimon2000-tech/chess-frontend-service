@@ -148,16 +148,6 @@ async function joinRoom(roomId) {
   return data;
 }
 
-async function leaveRoom(roomId) {
-  const res = await request(`${API.ROOMS}/rooms/${roomId}/leave`, {
-    method: 'POST',
-    headers: authHeaders(),
-  });
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.detail || 'Leave failed');
-  return data;
-}
-
 async function getRoom(roomId) {
   const res = await request(`${API.ROOMS}/rooms/${roomId}`, { headers: authHeaders() });
   const data = await res.json();
