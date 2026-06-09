@@ -215,10 +215,12 @@ function connectGameWS(gameId, handlers) {
     }
   };
 
+  const safeSend = (data) => { try { ws.send(data); } catch (_) {} };
+
   return {
-    sendMove:        (move)   => ws.send(JSON.stringify({ type: 'move', move })),
-    sendLegalMoves:  (square) => ws.send(JSON.stringify({ type: 'legal_moves', square })),
-    sendResign:      ()       => ws.send(JSON.stringify({ type: 'resign' })),
-    close:           ()       => ws.close(),
+    sendMove:       (move)   => safeSend(JSON.stringify({ type: 'move', move })),
+    sendLegalMoves: (square) => safeSend(JSON.stringify({ type: 'legal_moves', square })),
+    sendResign:     ()       => safeSend(JSON.stringify({ type: 'resign' })),
+    close:          ()       => ws.close(),
   };
 }
