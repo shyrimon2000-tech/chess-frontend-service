@@ -13,6 +13,8 @@ var PIECE_UNICODE = {
 var gameId      = new URLSearchParams(location.search).get('game_id');
 var myUserId    = null;
 var myColor     = null;
+var currentTurn = null;
+var gameStatus  = null;
 var gameOver    = false;
 var selectedSq  = null;
 var legalMoves  = [];   // array of UCI strings e.g. ["e2e3","e2e4"]
@@ -20,6 +22,7 @@ var ws          = null;
 var lastMoveSrc = null;
 var lastMoveDst = null;
 var disconnectTimer = null;
+var reconnectTimer  = null;
 
 // ── Init ──────────────────────────────────────────────────────
 (async function init() {
@@ -50,10 +53,21 @@ var disconnectTimer = null;
 
 // ── WebSocket ─────────────────────────────────────────────────
 function connectWS() {
+  clearTimeout(reconnectTimer);
   ws = connectGameWS(gameId, {
-    onOpen:    function() { clearGameMsg(); },
-    onClose:   function() { if (!gameOver) showGameMsg('Connection closed.', 'error'); },
-    onError:   function() { showGameMsg('WebSocket error.', 'error'); },
+    onOpen:  function() { clearGameMsg(); },
+    onClose: function(e) {
+      if (gameOver) return;
+      showGameMsg('Connection lost. Reconnecting…', 'error');
+      reconnectTimer = setTimeout(function() {
+        if (e && e.code === 4001) {
+          tryRefresh().finally(connectWS);
+        } else {
+          connectWS();
+        }
+      }, 3000);
+    },
+    onError:   function() {},
     onMessage: handleWsMessage
   });
 }
@@ -62,6 +76,7 @@ function handleWsMessage(msg) {
   switch (msg.type) {
     case 'game_start':
       applyGameState(msg.game || msg);
+      clearSelection();
       break;
 
     case 'game_state':
@@ -71,7 +86,6 @@ function handleWsMessage(msg) {
 
     case 'game_over':
       applyGameState(msg.game || msg);
-      showGameOver(msg.game || msg);
       break;
 
     case 'legal_moves':
@@ -114,12 +128,16 @@ function applyGameState(game) {
       myColor = 'spectator';
     }
     document.getElementById('my-color').textContent = myColor;
+    if (myColor === 'spectator') {
+      document.getElementById('resign-btn').style.display = 'none';
+    }
   }
 
-  var turn = game.current_turn || 'white';
+  gameStatus  = game.status || null;
+  currentTurn = game.current_turn || 'white';
   var turnEl = document.getElementById('current-turn');
-  turnEl.textContent = turn.charAt(0).toUpperCase() + turn.slice(1);
-  turnEl.className = 'value turn-' + turn;
+  turnEl.textContent = currentTurn.charAt(0).toUpperCase() + currentTurn.slice(1);
+  turnEl.className = 'value turn-' + currentTurn;
 
   document.getElementById('game-status').textContent = game.status || '—';
 
@@ -226,6 +244,9 @@ function renderCoords(flip) {
 // ── Click / move logic ────────────────────────────────────────
 function onSquareClick(sqName) {
   if (gameOver) return;
+  if (gameStatus !== 'active') return;
+  if (myColor === 'spectator') return;
+  if (currentTurn !== myColor) return;
 
   // If a square is already selected and user clicks a legal target → move
   if (selectedSq && legalMoves.some(function(m) { return m.slice(2, 4) === sqName && m.slice(0, 2) === selectedSq; })) {
@@ -373,7 +394,7 @@ function hideDisconnectBanner() {
 
 // ── Resign ────────────────────────────────────────────────────
 document.getElementById('resign-btn').addEventListener('click', function() {
-  if (gameOver) return;
+  if (gameOver || !ws) return;
   if (!confirm('Are you sure you want to resign?')) return;
   ws.sendResign();
 });

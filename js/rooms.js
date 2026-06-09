@@ -165,14 +165,17 @@ function showCreatedRoom(roomId) {
 // ── Poll room until game_id appears ───────────────────────────
 function pollForGame(roomId) {
   clearInterval(pollInterval);
-  pollInterval = setInterval(async function() {
+  async function check() {
     try {
       var room = await getRoom(roomId);
       if (room.game_id) {
+        clearInterval(pollInterval);
         goToGame(room.game_id);
       }
     } catch (_) {}
-  }, 2000);
+  }
+  check();
+  pollInterval = setInterval(check, 2000);
 }
 
 // ── Logout ────────────────────────────────────────────────────

@@ -214,7 +214,7 @@ function connectGameWS(gameId, handlers) {
   const ws = new WebSocket(`${wsBase}/api/game/ws/games/${gameId}?token=${token}`);
 
   ws.onopen    = () => handlers.onOpen?.();
-  ws.onclose   = () => handlers.onClose?.();
+  ws.onclose   = (e) => handlers.onClose?.(e);
   ws.onerror   = (e) => handlers.onError?.(e);
   ws.onmessage = (e) => {
     try {
