@@ -196,7 +196,8 @@ function renderBoard(fen) {
 
       var sq = document.createElement('div');
       sq.className = 'sq ' + ((ri + fi) % 2 === 0 ? 'light' : 'dark');
-      sq.dataset.sq = sqName;
+      sq.dataset.sq    = sqName;
+      sq.dataset.piece = piece || '';
 
       if (piece) {
         sq.innerHTML = '<span class="piece">' + (PIECE_UNICODE[piece] || piece) + '</span>';
@@ -330,28 +331,6 @@ function highlightLegal() {
   });
 }
 
-// Store piece info on each square element so getPieceAt can read it without
-// re-parsing the board. We do this inside renderBoard after innerHTML is set.
-// Patch renderBoard to tag squares with data-piece.
-var _origRenderBoard = renderBoard;
-renderBoard = function(fen) {
-  _origRenderBoard(fen);
-  var ranks = parseFen(fen);
-  var flip  = myColor === 'black';
-  var rankOrder = flip ? [7,6,5,4,3,2,1,0] : [0,1,2,3,4,5,6,7];
-  var fileOrder = flip ? [7,6,5,4,3,2,1,0] : [0,1,2,3,4,5,6,7];
-
-  rankOrder.forEach(function(ri) {
-    fileOrder.forEach(function(fi) {
-      var piece = ranks[ri][fi];
-      var rankNum  = 8 - ri;
-      var fileChar = String.fromCharCode(97 + fi);
-      var sqName   = fileChar + rankNum;
-      var el = document.querySelector('[data-sq="' + sqName + '"]');
-      if (el) el.dataset.piece = piece || '';
-    });
-  });
-};
 
 // ── Game over ─────────────────────────────────────────────────
 function showGameOver(game) {
