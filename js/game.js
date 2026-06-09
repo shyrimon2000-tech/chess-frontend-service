@@ -44,7 +44,8 @@ var reconnectTimer  = null;
     var game = await getGame(gameId);
     applyGameState(game);
   } catch (err) {
-    showGameMsg('Failed to load game: ' + (err.message || err), 'error');
+    showGameMsg((err.message || 'Failed to load game') + ' — redirecting to rooms…', 'error');
+    setTimeout(function() { window.location.href = '/rooms.html'; }, 3000);
     return;
   }
 
