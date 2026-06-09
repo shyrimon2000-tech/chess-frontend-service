@@ -91,6 +91,8 @@ function renderRooms(rooms) {
 // ── Join room ─────────────────────────────────────────────────
 async function handleJoin(roomId) {
   clearActionMsg();
+  var btn = document.querySelector('.join-btn[data-room-id="' + roomId + '"]');
+  if (btn) btn.disabled = true;
   try {
     var result = await joinRoom(roomId);
 
@@ -103,6 +105,7 @@ async function handleJoin(roomId) {
     pollForGame(roomId);
   } catch (err) {
     showActionMsg(err.message || 'Failed to join room.', 'error');
+    if (btn) btn.disabled = false;
   }
 }
 
@@ -165,14 +168,22 @@ function showCreatedRoom(roomId) {
 // ── Poll room until game_id appears ───────────────────────────
 function pollForGame(roomId) {
   clearInterval(pollInterval);
+  var errorCount = 0;
   async function check() {
     try {
       var room = await getRoom(roomId);
+      errorCount = 0;
       if (room.game_id) {
         clearInterval(pollInterval);
         goToGame(room.game_id);
       }
-    } catch (_) {}
+    } catch (_) {
+      errorCount++;
+      if (errorCount >= 3) {
+        clearInterval(pollInterval);
+        showActionMsg('Room no longer available.', 'error');
+      }
+    }
   }
   check();
   pollInterval = setInterval(check, 300);
