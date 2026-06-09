@@ -35,7 +35,7 @@ var MAX_RECONNECT     = 10;
 
   try {
     var me = await getMe();
-    myUserId = me.id || me.user_id || me.sub || me.username;
+    myUserId = String(me.id);
     document.getElementById('nav-username').textContent = me.username || me.email;
   } catch (_) {
     window.location.href = '/index.html';
