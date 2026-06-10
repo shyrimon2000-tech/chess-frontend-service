@@ -324,6 +324,11 @@ button:active:not(:disabled) {
   margin-bottom: 1.5rem;
 }
 
+.my-game-card {
+  border-color: var(--warning);
+  background: rgba(243, 156, 18, 0.06);
+}
+
 /* ── Game page ── */
 .game-layout {
   display: flex;

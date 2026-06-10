@@ -4,3 +4,4 @@ nginx.*
 test_browser.py
 docker-compose.yml
 Dockerfile
+__pycache__/

@@ -417,6 +417,13 @@ function hideDisconnectBanner() {
   document.getElementById('disconnect-banner').className = 'banner';
 }
 
+// ── Leave game ────────────────────────────────────────────────
+document.querySelector('a[href="rooms.html"]').addEventListener('click', function() {
+  if (!gameOver && gameStatus === 'active') {
+    sessionStorage.setItem('left_game', '1');
+  }
+});
+
 // ── Resign ────────────────────────────────────────────────────
 document.getElementById('resign-btn').addEventListener('click', function() {
   if (gameOver || !ws) return;

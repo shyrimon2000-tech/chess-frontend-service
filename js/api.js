@@ -30,7 +30,7 @@ function authHeaders() {
 // ---------- core fetch with auto-refresh ----------
 
 async function request(url, options = {}, retry = true) {
-  const res = await fetch(url, options);
+  const res = await fetch(url, { cache: 'no-store', ...options });
 
   if (res.status === 401 && retry) {
     const refreshed = await tryRefresh();

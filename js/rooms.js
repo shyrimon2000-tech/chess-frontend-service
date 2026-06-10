@@ -6,27 +6,34 @@ if (!localStorage.getItem('access_token')) {
 var refreshInterval = null;
 var createdRoomId   = null;
 var pollInterval    = null;
+var myId            = null;
 
 // ── Bootstrap ─────────────────────────────────────────────────
 (async function init() {
   var me = null;
   try {
     me = await getMe();
+    myId = String(me.id);
     document.getElementById('nav-username').textContent = me.username || me.email;
   } catch (_) {}
 
-  // Redirect back to active game if the player is already in one
   if (me) {
     try {
       var rooms = await listRooms();
-      var myId  = String(me.id);
-      var active = rooms.find(function(r) {
+      var myActiveRoom = rooms.find(function(r) {
         return r.game_id && r.status === 'active' &&
                (String(r.white_player_id) === myId || String(r.black_player_id) === myId);
       });
-      if (active) {
-        goToGame(active.game_id);
-        return;
+
+      if (myActiveRoom) {
+        var leftGame = sessionStorage.getItem('left_game');
+        sessionStorage.removeItem('left_game');
+        if (leftGame) {
+          showMyGamePanel(myActiveRoom);
+        } else {
+          goToGame(myActiveRoom.game_id);
+          return;
+        }
       }
     } catch (_) {}
   }
@@ -53,6 +60,20 @@ function goToGame(gameId) {
   window.location.href = '/game.html?game_id=' + gameId;
 }
 
+// ── My active game panel ──────────────────────────────────────
+function showMyGamePanel(room) {
+  var opponentNick = String(room.white_player_id) === myId
+    ? (room.black_player_nickname || '?')
+    : (room.white_player_nickname || '?');
+
+  document.getElementById('my-game-opponent').textContent = opponentNick;
+  document.getElementById('my-game-panel').classList.remove('hidden');
+
+  document.getElementById('my-game-return-btn').addEventListener('click', function() {
+    goToGame(room.game_id);
+  });
+}
+
 // ── Room list ─────────────────────────────────────────────────
 async function loadRooms() {
   try {
@@ -66,12 +87,18 @@ async function loadRooms() {
 function renderRooms(rooms) {
   var tbody = document.getElementById('rooms-tbody');
 
-  if (!rooms || rooms.length === 0) {
+  // Exclude the player's own active game — shown in the panel above
+  var filtered = rooms.filter(function(r) {
+    return !(myId && r.game_id && r.status === 'active' &&
+             (String(r.white_player_id) === myId || String(r.black_player_id) === myId));
+  });
+
+  if (filtered.length === 0) {
     tbody.innerHTML = '<tr><td colspan="6" class="text-muted text-center">No rooms yet.</td></tr>';
     return;
   }
 
-  tbody.innerHTML = rooms.map(function(room) {
+  tbody.innerHTML = filtered.map(function(room) {
     var date    = new Date(room.created_at).toLocaleTimeString();
     var badge   = '<span class="status-badge status-' + room.status + '">' + room.status + '</span>';
     var joinBtn = '';
