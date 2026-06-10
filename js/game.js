@@ -25,6 +25,8 @@ var disconnectTimer  = null;
 var reconnectTimer   = null;
 var reconnectAttempts = 0;
 var MAX_RECONNECT     = 10;
+var whiteNickname = null;
+var blackNickname = null;
 
 // ── Init ──────────────────────────────────────────────────────
 (async function init() {
@@ -93,6 +95,8 @@ function connectWS() {
 function handleWsMessage(msg) {
   switch (msg.type) {
     case 'game_start':
+      if (msg.white_nickname) whiteNickname = msg.white_nickname;
+      if (msg.black_nickname) blackNickname = msg.black_nickname;
       applyGameState(msg.game || msg);
       clearSelection();
       break;
@@ -102,6 +106,8 @@ function handleWsMessage(msg) {
         lastMoveSrc = msg.last_move.slice(0, 2);
         lastMoveDst = msg.last_move.slice(2, 4);
       }
+      if (msg.white_nickname) whiteNickname = msg.white_nickname;
+      if (msg.black_nickname) blackNickname = msg.black_nickname;
       applyGameState(msg.game || msg);
       clearSelection();
       break;
@@ -153,7 +159,6 @@ function applyGameState(game) {
     } else {
       myColor = 'spectator';
     }
-    document.getElementById('my-color').textContent = myColor;
     if (myColor === 'spectator') {
       document.getElementById('resign-btn').style.display = 'none';
     }
@@ -161,11 +166,9 @@ function applyGameState(game) {
 
   gameStatus  = game.status || null;
   currentTurn = game.current_turn || 'white';
-  var turnEl = document.getElementById('current-turn');
-  turnEl.textContent = currentTurn.charAt(0).toUpperCase() + currentTurn.slice(1);
-  turnEl.className = 'value turn-' + currentTurn;
 
   document.getElementById('game-status').textContent = game.status || '—';
+  updatePlayersBar();
 
   if (game.board_state) {
     renderBoard(game.board_state);
@@ -174,6 +177,23 @@ function applyGameState(game) {
   if (game.status === 'finished') {
     showGameOver(game);
   }
+}
+
+function updatePlayersBar() {
+  var leftColor  = myColor === 'white' ? 'black' : 'white';
+  var rightColor = myColor === 'white' ? 'white' : 'black';
+  var leftName   = leftColor  === 'white' ? (whiteNickname || '') : (blackNickname || '');
+  var rightName  = rightColor === 'white' ? (whiteNickname || '') : (blackNickname || '');
+
+  document.getElementById('left-name').textContent         = leftName;
+  document.getElementById('right-name').textContent        = rightName;
+  document.getElementById('left-color-label').textContent  = leftColor;
+  document.getElementById('right-color-label').textContent = rightColor;
+  document.getElementById('left-dot').className            = 'player-dot ' + leftColor;
+  document.getElementById('right-dot').className           = 'player-dot ' + rightColor;
+
+  document.getElementById('left-player').classList.toggle('active',  currentTurn === leftColor);
+  document.getElementById('right-player').classList.toggle('active', currentTurn === rightColor);
 }
 
 // ── Board rendering ───────────────────────────────────────────

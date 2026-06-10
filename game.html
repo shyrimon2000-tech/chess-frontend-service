@@ -37,15 +37,25 @@
       <!-- Sidebar -->
       <div class="game-sidebar">
 
+        <div class="players-bar">
+          <div class="player-card" id="left-player">
+            <div class="player-dot" id="left-dot"></div>
+            <div class="player-info">
+              <span class="player-name" id="left-name"></span>
+              <span class="player-color-label" id="left-color-label">—</span>
+            </div>
+          </div>
+          <span class="vs-label">vs</span>
+          <div class="player-card" id="right-player">
+            <div class="player-dot" id="right-dot"></div>
+            <div class="player-info">
+              <span class="player-name" id="right-name"></span>
+              <span class="player-color-label" id="right-color-label">—</span>
+            </div>
+          </div>
+        </div>
+
         <div class="status-bar">
-          <div class="status-row">
-            <span class="label">You</span>
-            <span class="value" id="my-color">—</span>
-          </div>
-          <div class="status-row">
-            <span class="label">Turn</span>
-            <span class="value" id="current-turn">—</span>
-          </div>
           <div class="status-row">
             <span class="label">Status</span>
             <span class="value" id="game-status">—</span>

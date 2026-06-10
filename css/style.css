@@ -456,6 +456,77 @@ button:active:not(:disabled) {
 .turn-white { color: #f8f8f8; }
 .turn-black { color: #b0b0b0; }
 
+.players-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.6rem 0.75rem;
+}
+
+.player-card {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.6rem;
+  border-radius: 8px;
+  border: 2px solid transparent;
+  min-width: 0;
+  transition: border-color 0.25s, background 0.25s;
+}
+
+.player-card.active {
+  border-color: var(--warning);
+  background: rgba(243, 156, 18, 0.08);
+}
+
+.player-dot {
+  width: 0.8em;
+  height: 0.8em;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.player-dot.white {
+  background: #f0d9b5;
+  border: 2px solid #b58863;
+}
+
+.player-dot.black {
+  background: #2c2c2c;
+  border: 2px solid #888;
+}
+
+.player-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.player-name {
+  font-weight: 600;
+  font-size: 0.92em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.player-color-label {
+  font-size: 0.72em;
+  color: var(--text-muted);
+  text-transform: capitalize;
+}
+
+.vs-label {
+  color: var(--text-muted);
+  font-size: 0.78em;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
 .game-controls {
   display: flex;
   flex-direction: column;

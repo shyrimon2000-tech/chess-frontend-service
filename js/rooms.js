@@ -9,10 +9,27 @@ var pollInterval    = null;
 
 // ── Bootstrap ─────────────────────────────────────────────────
 (async function init() {
+  var me = null;
   try {
-    var me = await getMe();
+    me = await getMe();
     document.getElementById('nav-username').textContent = me.username || me.email;
   } catch (_) {}
+
+  // Redirect back to active game if the player is already in one
+  if (me) {
+    try {
+      var rooms = await listRooms();
+      var myId  = String(me.id);
+      var active = rooms.find(function(r) {
+        return r.game_id && r.status === 'active' &&
+               (String(r.white_player_id) === myId || String(r.black_player_id) === myId);
+      });
+      if (active) {
+        goToGame(active.game_id);
+        return;
+      }
+    } catch (_) {}
+  }
 
   await loadRooms();
   refreshInterval = setInterval(loadRooms, 5000);
@@ -50,7 +67,7 @@ function renderRooms(rooms) {
   var tbody = document.getElementById('rooms-tbody');
 
   if (!rooms || rooms.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="5" class="text-muted text-center">No rooms yet.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="6" class="text-muted text-center">No rooms yet.</td></tr>';
     return;
   }
 
@@ -67,7 +84,8 @@ function renderRooms(rooms) {
 
     return '<tr>' +
       '<td class="text-muted">#' + room.id + '</td>' +
-      '<td>' + (room.white_player_id || '—') + '</td>' +
+      '<td>' + (room.white_player_nickname || '—') + '</td>' +
+      '<td>' + (room.black_player_nickname || '—') + '</td>' +
       '<td>' + badge + '</td>' +
       '<td class="text-muted">' + date + '</td>' +
       '<td>' + joinBtn + '</td>' +
