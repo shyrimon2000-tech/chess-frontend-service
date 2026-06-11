@@ -24,12 +24,26 @@
   padding: 0;
 }
 
+html {
+  margin: 0;
+  overflow: hidden;
+}
+
 body {
   background: var(--bg-primary);
   color: var(--text-primary);
   font-family: 'Segoe UI', system-ui, sans-serif;
   font-size: 15px;
   min-height: 100vh;
+  overflow: hidden;
+}
+
+body.login-bg {
+  background-color: #0d0718;
+  background-image: url('../img/login_background.png');
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
 }
 
 /* ── Nav bar ── */
@@ -125,7 +139,8 @@ button:active:not(:disabled) {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
+  height: 100dvh;
+  min-height: 720px;
   padding: 1rem;
 }
 
