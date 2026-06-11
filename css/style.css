@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap');
+
 :root {
   --bg-primary:    #1a1a2e;
   --bg-secondary:  #16213e;
@@ -134,7 +136,7 @@ button:active:not(:disabled) {
   padding: 2rem 1rem;
 }
 
-/* ── Auth page ── */
+/* ── Auth page (medieval pixel-art) ── */
 .auth-wrapper {
   display: flex;
   align-items: center;
@@ -145,44 +147,95 @@ button:active:not(:disabled) {
 }
 
 .auth-box {
-  background: var(--bg-secondary);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 2rem;
+  position: relative;
+  background-color: #1a0f2f;
+  /* Gold L-corner accents via background-image layers */
+  background-image:
+    linear-gradient(#d89b3d, #d89b3d),
+    linear-gradient(#d89b3d, #d89b3d),
+    linear-gradient(#d89b3d, #d89b3d),
+    linear-gradient(#d89b3d, #d89b3d),
+    linear-gradient(#d89b3d, #d89b3d),
+    linear-gradient(#d89b3d, #d89b3d),
+    linear-gradient(#d89b3d, #d89b3d),
+    linear-gradient(#d89b3d, #d89b3d);
+  background-size:
+    20px 3px, 3px 20px,
+    20px 3px, 3px 20px,
+    20px 3px, 3px 20px,
+    20px 3px, 3px 20px;
+  background-position:
+    left 6px top 6px, left 6px top 6px,
+    right 6px top 6px, right 6px top 6px,
+    left 6px bottom 6px, left 6px bottom 6px,
+    right 6px bottom 6px, right 6px bottom 6px;
+  background-repeat: no-repeat;
+  border: 3px solid #7b4ca0;
+  border-radius: 2px;
+  padding: 2.25rem 2rem;
   width: 100%;
-  max-width: 420px;
+  max-width: 460px;
+  box-shadow:
+    inset 2px 2px 0 #2e1558,
+    inset -2px -2px 0 #0d0618,
+    0 0 0 2px #12091f,
+    0 0 0 5px #5a2a7a,
+    0 0 0 7px #12091f,
+    12px 12px 0 rgba(0, 0, 0, 0.55);
 }
 
 .auth-box h1 {
   text-align: center;
-  font-size: 1.6rem;
-  color: var(--accent);
-  margin-bottom: 1.5rem;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 1rem;
+  color: #f0c36a;
+  margin-bottom: 1.75rem;
+  letter-spacing: 0.06em;
+  text-shadow: 3px 3px 0 #5a2800, 0 0 28px rgba(240, 195, 106, 0.35);
+  line-height: 1.8;
 }
 
 .tabs {
   display: flex;
-  border-bottom: 2px solid var(--border);
+  border: 3px solid #5a2a7a;
+  border-radius: 2px;
   margin-bottom: 1.5rem;
+  overflow: hidden;
 }
 
 .tab-btn {
   flex: 1;
-  background: none;
+  background: #12091f;
   border: none;
-  border-bottom: 2px solid transparent;
-  margin-bottom: -2px;
-  color: var(--text-muted);
-  padding: 0.6rem;
-  font-size: 0.95rem;
-  font-weight: 600;
+  border-right: 3px solid #5a2a7a;
+  border-bottom: none;
+  margin-bottom: 0;
+  color: #7b4ca0;
+  padding: 0.65rem 0.5rem;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.55rem;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
   border-radius: 0;
-  transition: color 0.15s, border-color 0.15s;
+  cursor: pointer;
+  transition: background 0.1s, color 0.1s;
+}
+
+.tab-btn:last-child {
+  border-right: none;
+}
+
+.tab-btn:hover:not(.active) {
+  background: #1e0e38;
+  color: #b99bd6;
 }
 
 .tab-btn.active {
-  color: var(--accent);
-  border-bottom-color: var(--accent);
+  background: #1a0f2f;
+  color: #f0c36a;
+  text-shadow: 0 0 10px rgba(240, 195, 106, 0.5);
+  box-shadow: inset 0 3px 0 #d89b3d;
 }
 
 .tab-panel {
@@ -194,38 +247,90 @@ button:active:not(:disabled) {
 }
 
 .form-group {
-  margin-bottom: 1rem;
+  margin-bottom: 1.1rem;
 }
 
 .form-group label {
   display: block;
-  margin-bottom: 0.3rem;
-  color: var(--text-muted);
-  font-size: 0.85rem;
-  font-weight: 600;
+  margin-bottom: 0.4rem;
+  color: #b99bd6;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.55rem;
+  font-weight: 400;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.1em;
 }
 
 .form-group input {
   width: 100%;
-  padding: 0.6rem 0.85rem;
-  background: var(--bg-input);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  color: var(--text-primary);
-  font-size: 0.95rem;
-  transition: border-color 0.15s;
+  padding: 0.65rem 0.85rem;
+  background: #0d0618;
+  border: 3px solid #7b4ca0;
+  border-radius: 2px;
+  color: #e2ceff;
+  font-size: 1.1rem;
+  font-family: 'VT323', monospace;
+  letter-spacing: 0.04em;
+  transition: border-color 0.1s;
+  box-shadow:
+    inset 3px 3px 0 #12091f,
+    inset -2px -2px 0 #2e1558;
+}
+
+.form-group input::placeholder {
+  color: #3d1f5e;
 }
 
 .form-group input:focus {
   outline: none;
-  border-color: var(--accent);
+  border-color: #9b6ac8;
+  box-shadow:
+    inset 3px 3px 0 #12091f,
+    inset -2px -2px 0 #2e1558,
+    0 0 0 2px rgba(155, 106, 200, 0.25);
 }
 
 .form-submit {
   width: 100%;
   margin-top: 0.5rem;
+}
+
+/* Parchment button — scoped to auth card only */
+.auth-box .btn-primary {
+  background: #f3dfbd;
+  color: #21122f;
+  border: 3px solid #21122f;
+  border-radius: 2px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.6rem;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.85rem 1.2rem;
+  box-shadow:
+    4px 4px 0 #21122f,
+    inset 0 2px 0 rgba(255, 255, 255, 0.35);
+  transition: background 0.1s, box-shadow 0.05s, transform 0.05s;
+}
+
+.auth-box .btn-primary:hover:not(:disabled) {
+  background: #fff0cf;
+  box-shadow:
+    4px 4px 0 #21122f,
+    inset 0 2px 0 rgba(255, 255, 255, 0.5),
+    0 0 14px rgba(208, 155, 61, 0.4);
+}
+
+.auth-box .btn-primary:active:not(:disabled) {
+  transform: translate(3px, 3px);
+  box-shadow: 1px 1px 0 #21122f;
+}
+
+.auth-box .btn-primary:disabled {
+  background: #c9b898;
+  color: #5a4a2e;
+  box-shadow: 3px 3px 0 #21122f;
+  opacity: 0.65;
 }
 
 /* ── Messages ── */
@@ -257,6 +362,33 @@ button:active:not(:disabled) {
   background: rgba(52, 152, 219, 0.15);
   border: 1px solid #3498db;
   color: #74b9ff;
+}
+
+/* Auth card message overrides — fantasy style */
+.auth-box .msg {
+  border-radius: 2px;
+  font-family: 'VT323', monospace;
+  font-size: 1.05rem;
+  letter-spacing: 0.03em;
+  border-width: 2px;
+}
+
+.auth-box .msg-error {
+  background: rgba(120, 20, 20, 0.35);
+  border-color: #a03030;
+  color: #ff9999;
+}
+
+.auth-box .msg-success {
+  background: rgba(20, 80, 20, 0.35);
+  border-color: #30a030;
+  color: #99dd99;
+}
+
+.auth-box .msg-info {
+  background: rgba(50, 15, 80, 0.5);
+  border-color: #7b4ca0;
+  color: #c8a8e8;
 }
 
 /* ── Rooms page ── */
