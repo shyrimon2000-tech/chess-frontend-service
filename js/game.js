@@ -39,7 +39,7 @@ var blackNickname = null;
     var me = await getMe();
     myUserId = String(me.id);
     document.getElementById('nav-username').textContent = me.username || me.email;
-  } catch (_) {
+  } catch (e) {
     window.location.href = '/index.html';
     return;
   }

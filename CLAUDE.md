@@ -33,7 +33,6 @@ docker compose up --build
 ```
 Sibling repos expected at `../chess-auth-service`, `../chess-room-service`, `../chess-game-service`.
 Frontend accessible at `http://localhost:8080`.
-chess-auth-service uses a ghcr.io image (no local build needed).
 
 ## Architecture
 
@@ -52,12 +51,20 @@ WebSocket URL: `ws://<host>/api/game/ws/games/{game_id}?token=<jwt>`
 
 `room_events` channel (room-service → game-service):
 - `room_created`  → game-service creates game row (status=waiting, white_player_id set, black null)
-- `room_activated`→ game-service sets game status=active + black_player_id, broadcasts game_start via WS
+- `room_activated`→ game-service sets game status=active + black_player_id
 
 `game_events` channel (game-service → room-service):
-- `game_created`  → room-service writes game_id onto the room row
+- `game_created`   → room-service writes game_id onto the room row
+- `game_over`      → room-service deletes the room row
+- `game_abandoned` → room-service deletes the room row
 
-No other cross-service events. game-service does NOT re-publish after room_activated.
+Internal `ws_broadcast` channel (game-service → game-service):
+- Used for cross-instance WebSocket delivery; each instance relays to its local connections
+
+Redis keys used by game-service:
+- `game:last_move:{game_id}` — last UCI move, included in game_state/game_over broadcasts
+- `game:disconnect:{game_id}:{color}` — disconnect timestamp with 30s TTL for reconnect timer
+- `game:nickname:{game_id}:{user_id}` — player nickname, included in game_start/game_state
 
 ## Game lifecycle
 
@@ -65,8 +72,9 @@ No other cross-service events. game-service does NOT re-publish after room_activ
 2. game-service publishes `game_created` → room-service records `game_id` on room
 3. Player A is redirected to `game.html?game_id=X`, opens WS — game still waiting, no broadcast yet
 4. Player B joins room → room-service publishes `room_activated` → game-service activates game
-5. game-service broadcasts `game_start` to all WS clients for that game_id
+5. Player B opens WS → game-service broadcasts `game_start` to all WS clients for that game_id
 6. Both players see the board; Player A (white) moves first
+7. Game ends (checkmate / stalemate / resign / disconnect timeout) → game-service publishes `game_over` → room-service deletes room row; game row also deleted
 
 ## Auth flow
 
@@ -85,7 +93,7 @@ if (!localStorage.getItem('access_token')) {
 ## api.js
 
 Auth: `register(username, email, password)`, `login(email, password)`, `logout()`, `getMe()`
-Rooms: `listRooms()`, `createRoom()`, `quickJoin()`, `joinRoom(roomId)`, `leaveRoom(roomId)`, `getRoom(roomId)`
+Rooms: `listRooms()`, `createRoom()`, `quickJoin()`, `joinRoom(roomId)`, `getRoom(roomId)`
 Game: `getGame(gameId)`, `makeMove(gameId, move)`, `getLegalMoves(gameId, square)`, `resign(gameId)`
 WebSocket: `connectGameWS(gameId, handlers)` — returns `{ sendMove, sendLegalMoves, sendResign, close }`
 
@@ -93,6 +101,11 @@ WS handlers: `onOpen`, `onClose(e)`, `onError`, `onMessage(msg)`
 - `onClose` receives the full CloseEvent — check `e.code === 4001` for auth failure
 WS message types from server: `game_start`, `game_state`, `game_over`, `legal_moves`,
 `player_disconnected`, `player_reconnected`, `game_abandoned`, `error`
+
+Notable WS message fields:
+- `game_start` / `game_state`: include `white_nickname`, `black_nickname` (from Redis); `game_state` also includes `last_move`
+- `game_over`: includes `last_move` when triggered by a move (not on resign or timeout)
+- `player_disconnected`: includes `color` and `timeout_seconds` (always 30)
 
 ## API reference
 
@@ -112,10 +125,11 @@ POST /rooms                     → create room (caller = white_player_id), 201 
 POST /rooms/quick               → join available room or create new one
 GET  /rooms/{room_id}           → room object
 POST /rooms/{room_id}/join      → { role: "player"|"spectator", status, ... }
-POST /rooms/{room_id}/leave     → leave waiting room
 DELETE /rooms/{room_id}         → admin only
 ```
-Room object fields: `id, status (waiting|active|finished), white_player_id, black_player_id, game_id, created_at`
+Room object fields: `id, status (waiting|active), white_player_id, black_player_id, white_player_nickname, black_player_nickname, game_id, created_at`
+
+Rooms are **deleted** when a game ends — there is no `finished` status. A room disappears from the list when `game_over` or `game_abandoned` fires.
 
 ### chess-game-service
 ```
@@ -126,17 +140,19 @@ GET  /games/{game_id}/legal-moves?square=e2  → { moves: ["e2e3", "e2e4"] }
 POST /games/{game_id}/resign                 → game object with status: finished
 WS   /ws/games/{game_id}?token=<jwt>
 ```
-Game object fields: `id, room_id, status (active|finished), white_player_id, black_player_id, current_turn (white|black), board_state (FEN), winner, created_at, updated_at`
+Game object fields: `id, room_id, status (waiting|active|finished), white_player_id, black_player_id, current_turn (white|black), board_state (FEN), winner, created_at, updated_at`
+
+Games are **deleted** when they end. `status: finished` appears only in the final WS broadcast (`game_over`) — the row is gone from the DB immediately after.
 
 ## WebSocket connection rules (ws.py in game-service)
 
 - Token invalid → close 4001
-- `is_player = user_id in (white_player_id, black_player_id)` — spectators connect as null
-- Fresh player connection to active game → `broadcast(game_start)` (notifies all, including white waiting)
-- Reconnecting player (was marked disconnected) → `send_personal(game_state)` + `broadcast(player_reconnected)`
-- Spectator connecting to active game → `send_personal(game_state)`
-- Player disconnect from active game → `broadcast(player_disconnected)` + 30s abandon timer
-- Player disconnect from waiting game → `broadcast(game_abandoned)` — in practice, game is activated before WS is opened by both players now
+- `is_player = user_id in (white_player_id, black_player_id)`
+- Fresh player connection to active game → `broadcast(game_start)` with `white_nickname`/`black_nickname`
+- Reconnecting player (was marked disconnected) → `send_personal(game_state)` with `last_move` + `broadcast(player_reconnected)`
+- Spectator connecting to active game → `send_personal(game_state)` with `last_move`
+- Player disconnect from active game → `broadcast(player_disconnected, timeout_seconds=30)` + 30s abandon timer
+- Player disconnect from waiting game → game row deleted + `broadcast(game_abandoned)`
 
 ## Board rendering
 
@@ -154,7 +170,7 @@ Flip board for black player (`myColor === 'black'`); spectator sees white's pers
 var myUserId    // current user's id (string)
 var myColor     // 'white' | 'black' | 'spectator'
 var currentTurn // 'white' | 'black'
-var gameStatus  // 'active' | 'finished' | 'waiting'
+var gameStatus  // 'waiting' | 'active' | 'finished'
 var gameOver    // true once game_over or game_abandoned received
 var ws          // handle returned by connectGameWS
 ```
@@ -175,7 +191,7 @@ game.html   →  (game over / resign)  →  rooms.html
 
 Pass `game_id` via URL query param: `game.html?game_id=1`
 
-rooms.js polls `getRoom(roomId)` every 2s (with one immediate check) until `game_id` appears.
+rooms.js polls `getRoom(roomId)` every 300ms (with one immediate check) until `game_id` appears.
 
 ## Code style
 

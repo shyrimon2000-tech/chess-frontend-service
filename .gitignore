@@ -5,3 +5,5 @@ test_browser.py
 docker-compose.yml
 Dockerfile
 __pycache__/
+tests/.reg_times.json
+tests/debug_ws.py
