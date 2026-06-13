@@ -147,71 +147,25 @@ button:active:not(:disabled) {
 }
 
 .auth-box {
-  position: relative;
-  background-color: #1a0f2f;
-  /* Gold L-corner accents via background-image layers */
-  background-image:
-    linear-gradient(#d89b3d, #d89b3d),
-    linear-gradient(#d89b3d, #d89b3d),
-    linear-gradient(#d89b3d, #d89b3d),
-    linear-gradient(#d89b3d, #d89b3d),
-    linear-gradient(#d89b3d, #d89b3d),
-    linear-gradient(#d89b3d, #d89b3d),
-    linear-gradient(#d89b3d, #d89b3d),
-    linear-gradient(#d89b3d, #d89b3d);
-  background-size:
-    20px 3px, 3px 20px,
-    20px 3px, 3px 20px,
-    20px 3px, 3px 20px,
-    20px 3px, 3px 20px;
-  background-position:
-    left 6px top 6px, left 6px top 6px,
-    right 6px top 6px, right 6px top 6px,
-    left 6px bottom 6px, left 6px bottom 6px,
-    right 6px bottom 6px, right 6px bottom 6px;
-  background-repeat: no-repeat;
-  border: 3px solid #7b4ca0;
-  border-radius: 2px;
-  padding: 2.25rem 2rem;
   width: 100%;
-  max-width: 460px;
-  box-shadow:
-    inset 2px 2px 0 #2e1558,
-    inset -2px -2px 0 #0d0618,
-    0 0 0 2px #12091f,
-    0 0 0 5px #5a2a7a,
-    0 0 0 7px #12091f,
-    12px 12px 0 rgba(0, 0, 0, 0.55);
+  max-width: 400px;
 }
 
-.auth-box h1 {
-  text-align: center;
-  font-family: 'Press Start 2P', monospace;
-  font-size: 1rem;
-  color: #f0c36a;
-  margin-bottom: 1.75rem;
-  letter-spacing: 0.06em;
-  text-shadow: 3px 3px 0 #5a2800, 0 0 28px rgba(240, 195, 106, 0.35);
-  line-height: 1.8;
-}
 
 .tabs {
   display: flex;
-  border: 3px solid #5a2a7a;
-  border-radius: 2px;
-  margin-bottom: 1.5rem;
-  overflow: hidden;
+  gap: 1.5rem;
+  justify-content: center;
+  margin-top: 1.5rem;
 }
 
 .tab-btn {
-  flex: 1;
-  background: #12091f;
+  flex: 0;
+  background: transparent;
   border: none;
-  border-right: 3px solid #5a2a7a;
-  border-bottom: none;
-  margin-bottom: 0;
-  color: #7b4ca0;
-  padding: 0.65rem 0.5rem;
+  border-bottom: 3px solid transparent;
+  color: #b99bd6;
+  padding: 0.4rem 0;
   font-family: 'Press Start 2P', monospace;
   font-size: 0.55rem;
   font-weight: 400;
@@ -219,7 +173,7 @@ button:active:not(:disabled) {
   letter-spacing: 0.06em;
   border-radius: 0;
   cursor: pointer;
-  transition: background 0.1s, color 0.1s;
+  transition: color 0.15s, border-color 0.15s;
 }
 
 .tab-btn:last-child {
@@ -227,15 +181,11 @@ button:active:not(:disabled) {
 }
 
 .tab-btn:hover:not(.active) {
-  background: #1e0e38;
   color: #b99bd6;
 }
 
 .tab-btn.active {
-  background: #1a0f2f;
-  color: #f0c36a;
-  text-shadow: 0 0 10px rgba(240, 195, 106, 0.5);
-  box-shadow: inset 0 3px 0 #d89b3d;
+  display: none;
 }
 
 .tab-panel {
@@ -250,23 +200,12 @@ button:active:not(:disabled) {
   margin-bottom: 1.1rem;
 }
 
-.form-group label {
-  display: block;
-  margin-bottom: 0.4rem;
-  color: #b99bd6;
-  font-family: 'Press Start 2P', monospace;
-  font-size: 0.55rem;
-  font-weight: 400;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-}
-
 .form-group input {
   width: 100%;
-  padding: 0.65rem 0.85rem;
+  padding: 0.65rem 1rem;
   background: #0d0618;
   border: 3px solid #7b4ca0;
-  border-radius: 2px;
+  border-radius: 12px;
   color: #e2ceff;
   font-size: 1.1rem;
   font-family: 'VT323', monospace;
@@ -278,7 +217,7 @@ button:active:not(:disabled) {
 }
 
 .form-group input::placeholder {
-  color: #3d1f5e;
+  color: #b99bd6;
 }
 
 .form-group input:focus {
@@ -300,7 +239,7 @@ button:active:not(:disabled) {
   background: #f3dfbd;
   color: #21122f;
   border: 3px solid #21122f;
-  border-radius: 2px;
+  border-radius: 12px;
   font-family: 'Press Start 2P', monospace;
   font-size: 0.6rem;
   font-weight: 400;
