@@ -1,9 +1,6 @@
-k8s/
 .env
-nginx.*
-test_browser.py
-docker-compose.yml
-Dockerfile
 __pycache__/
+screenshots/
+test_browser.py
 tests/.reg_times.json
 tests/debug_ws.py

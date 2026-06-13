@@ -1,0 +1,14 @@
+.git
+.gitignore
+.gitattributes
+.env
+.claude
+CLAUDE.md
+README.md
+tests/
+screenshots/
+test_browser.py
+docker-compose.yml
+nginx.dev.conf
+Dockerfile
+__pycache__/
