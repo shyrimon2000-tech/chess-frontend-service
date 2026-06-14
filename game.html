@@ -21,18 +21,7 @@
     <div class="game-layout">
 
       <!-- Board -->
-      <div class="board-wrapper">
-        <div class="board-with-coords">
-          <div class="board-row-with-rank" id="board-row-8">
-            <span class="coord-rank" id="rank-8">8</span>
-            <!-- squares injected by JS -->
-          </div>
-          <!-- rows 7–1 injected by JS -->
-          <div class="coord-files" id="coord-files">
-            <!-- a–h labels injected by JS -->
-          </div>
-        </div>
-        <!-- The actual grid -->
+      <div class="board-bg">
         <div id="chessboard"></div>
       </div>
 
@@ -81,7 +70,7 @@
         <div id="game-msg" class="msg msg-error"></div>
 
         <div class="game-controls">
-          <button class="btn btn-danger" id="resign-btn">Resign</button>
+          <button class="btn btn-danger" id="resign-btn" style="display:none">Resign</button>
         </div>
 
       </div>

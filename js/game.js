@@ -137,7 +137,7 @@ function handleWsMessage(msg) {
       hideDisconnectBanner();
       showBanner('game-over-banner', 'Game abandoned', 'Opponent left the game.', 'winner-draw');
       gameOver = true;
-      document.getElementById('resign-btn').disabled = true;
+      document.getElementById('resign-btn').style.display = 'none';
       break;
 
     case 'error':
@@ -159,13 +159,14 @@ function applyGameState(game) {
     } else {
       myColor = 'spectator';
     }
-    if (myColor === 'spectator') {
-      document.getElementById('resign-btn').style.display = 'none';
-    }
   }
 
   gameStatus  = game.status || null;
   currentTurn = game.current_turn || 'white';
+
+  // Show resign only to players in an active, ongoing game
+  document.getElementById('resign-btn').style.display =
+    (myColor !== 'spectator' && gameStatus === 'active' && !gameOver) ? '' : 'none';
 
   document.getElementById('game-status').textContent = game.status || '—';
   updatePlayersBar();
@@ -361,7 +362,7 @@ function highlightLegal() {
 // ── Game over ─────────────────────────────────────────────────
 function showGameOver(game) {
   gameOver = true;
-  document.getElementById('resign-btn').disabled = true;
+  document.getElementById('resign-btn').style.display = 'none';
   clearSelection();
 
   var winner = game.winner;
