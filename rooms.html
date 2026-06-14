@@ -6,9 +6,11 @@
   <title>Chess — Rooms</title>
   <link rel="stylesheet" href="css/style.css" />
 </head>
-<body>
+<body class="room-game-bg">
   <nav class="navbar">
-    <span class="logo">♟ Chess</span>
+    <div class="logo-wrap">
+      <img src="img/text.png" class="nav-logo" alt="Chess" />
+    </div>
     <div class="nav-right">
       <span class="username" id="nav-username"></span>
       <button class="btn btn-secondary btn-sm" id="logout-btn">Logout</button>
@@ -16,12 +18,8 @@
   </nav>
 
   <div class="page-container">
-    <div class="rooms-header">
-      <h2>Game Rooms</h2>
-    </div>
-
     <div class="action-bar">
-      <button class="btn btn-primary" id="quick-join-btn">⚡ Quick Join</button>
+      <button class="btn btn-primary" id="quick-join-btn"><span style="display:inline-block;transform:scale(3);margin:0 0.5em 0 0.3em">⚔</span> Quick Join</button>
       <button class="btn btn-secondary" id="create-room-btn">+ Create Room</button>
     </div>
 

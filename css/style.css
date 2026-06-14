@@ -28,16 +28,14 @@
 
 html {
   margin: 0;
-  overflow: hidden;
 }
 
 body {
   background: var(--bg-primary);
   color: var(--text-primary);
   font-family: 'Segoe UI', system-ui, sans-serif;
-  font-size: 15px;
+  font-size: clamp(13px, 1.5vw, 16px);
   min-height: 100vh;
-  overflow: hidden;
 }
 
 body.login-bg {
@@ -46,6 +44,7 @@ body.login-bg {
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
+  overflow: hidden;
 }
 
 /* ── Nav bar ── */
@@ -65,6 +64,24 @@ body.login-bg {
   letter-spacing: 0.05em;
 }
 
+.nav-logo {
+  height: clamp(1.1rem, 3vh, 1.75rem);
+  width: auto;
+  image-rendering: pixelated;
+  display: block;
+}
+
+body.room-game-bg .navbar .logo-wrap {
+  background: rgba(8, 3, 18, 0.78);
+  backdrop-filter: blur(10px);
+  border: 2px solid #7b4ca0;
+  border-radius: 999px;
+  padding: 0.45rem 1rem;
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+}
+
 .navbar .nav-right {
   display: flex;
   align-items: center;
@@ -80,7 +97,7 @@ body.login-bg {
 button, .btn {
   cursor: pointer;
   border: none;
-  border-radius: 6px;
+  border-radius: 0.375rem;
   padding: 0.55rem 1.2rem;
   font-size: 0.9rem;
   font-weight: 600;
@@ -131,7 +148,7 @@ button:active:not(:disabled) {
 
 /* ── Page container ── */
 .page-container {
-  max-width: 960px;
+  max-width: 60rem;
   margin: 0 auto;
   padding: 2rem 1rem;
 }
@@ -144,42 +161,31 @@ button:active:not(:disabled) {
   align-items: center;
   justify-content: center;
   height: 100dvh;
-  min-height: 720px;
-  padding: 1rem;
+  min-height: clamp(28rem, 80vh, 50rem);
+  padding: clamp(1rem, 3vh, 2rem) 1rem;
+  gap: clamp(0.75rem, 2.5vh, 1.5rem);
 }
 
 .auth-logo-img {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, calc(-50% - 6.5cm));
-  width: calc(204px - 0.5cm);
-  height: calc(204px - 1.5cm);
+  width: clamp(7rem, 14vw, 11rem);
+  height: auto;
   image-rendering: pixelated;
-  z-index: 0;
   pointer-events: none;
+  flex-shrink: 0;
 }
 
 .auth-title-img {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, calc(-50% - 3cm));
-  max-width: 600px;
-  width: 100%;
+  max-width: 32.5rem;
+  width: 90%;
   image-rendering: pixelated;
-  z-index: 1;
   pointer-events: none;
+  flex-shrink: 0;
 }
 
 .auth-box {
-  position: relative;
-  z-index: 1;
   width: 100%;
-  max-width: 400px;
-  transform: translateY(2cm);
+  max-width: 25rem;
 }
-
 
 .tabs {
   display: flex;
@@ -234,7 +240,7 @@ button:active:not(:disabled) {
   padding: 0.85rem 1rem;
   background: #0d0618;
   border: 3px solid #7b4ca0;
-  border-radius: 12px;
+  border-radius: 0.75rem;
   color: #e2ceff;
   font-size: 0.6rem;
   font-family: 'Press Start 2P', monospace;
@@ -268,7 +274,7 @@ button:active:not(:disabled) {
   background: #f3dfbd;
   color: #21122f;
   border: 3px solid #21122f;
-  border-radius: 12px;
+  border-radius: 0.75rem;
   font-family: 'Press Start 2P', monospace;
   font-size: 0.6rem;
   font-weight: 400;
@@ -303,7 +309,7 @@ button:active:not(:disabled) {
 
 /* ── Messages ── */
 .msg {
-  border-radius: 6px;
+  border-radius: 0.375rem;
   padding: 0.6rem 0.85rem;
   font-size: 0.88rem;
   margin-top: 0.75rem;
@@ -334,7 +340,7 @@ button:active:not(:disabled) {
 
 /* Auth card message overrides — fantasy style */
 .auth-box .msg {
-  border-radius: 2px;
+  border-radius: 0.125rem;
   font-family: 'VT323', monospace;
   font-size: 1.05rem;
   letter-spacing: 0.03em;
@@ -420,7 +426,7 @@ button:active:not(:disabled) {
 .status-badge {
   display: inline-block;
   padding: 0.2rem 0.55rem;
-  border-radius: 20px;
+  border-radius: 1.25rem;
   font-size: 0.75rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -434,7 +440,7 @@ button:active:not(:disabled) {
 .card {
   background: var(--bg-secondary);
   border: 1px solid var(--border);
-  border-radius: 10px;
+  border-radius: 0.625rem;
   padding: 1.25rem;
   margin-bottom: 1.5rem;
 }
@@ -467,7 +473,7 @@ button:active:not(:disabled) {
 }
 
 .coord-rank {
-  width: 20px;
+  width: 1.25rem;
   text-align: center;
   font-size: 0.75rem;
   color: var(--text-muted);
@@ -476,7 +482,7 @@ button:active:not(:disabled) {
 
 .coord-files {
   display: flex;
-  padding-left: 20px;
+  padding-left: 1.25rem;
 }
 
 .coord-file {
@@ -492,7 +498,7 @@ button:active:not(:disabled) {
   grid-template-columns: repeat(8, 72px);
   grid-template-rows: repeat(8, 72px);
   border: 3px solid var(--border);
-  border-radius: 4px;
+  border-radius: 0.25rem;
   overflow: hidden;
 }
 
@@ -539,7 +545,7 @@ button:active:not(:disabled) {
 
 .game-sidebar {
   flex: 1;
-  min-width: 220px;
+  min-width: 13.75rem;
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -548,7 +554,7 @@ button:active:not(:disabled) {
 .status-bar {
   background: var(--bg-secondary);
   border: 1px solid var(--border);
-  border-radius: 10px;
+  border-radius: 0.625rem;
   padding: 1rem;
 }
 
@@ -582,7 +588,7 @@ button:active:not(:disabled) {
   gap: 0.5rem;
   background: var(--bg-secondary);
   border: 1px solid var(--border);
-  border-radius: 10px;
+  border-radius: 0.625rem;
   padding: 0.6rem 0.75rem;
 }
 
@@ -592,7 +598,7 @@ button:active:not(:disabled) {
   align-items: center;
   gap: 0.5rem;
   padding: 0.5rem 0.6rem;
-  border-radius: 8px;
+  border-radius: 0.5rem;
   border: 2px solid transparent;
   min-width: 0;
   transition: border-color 0.25s, background 0.25s;
@@ -657,7 +663,7 @@ button:active:not(:disabled) {
   display: none;
   background: var(--bg-secondary);
   border: 1px solid var(--border);
-  border-radius: 10px;
+  border-radius: 0.625rem;
   padding: 1.25rem;
   text-align: center;
 }
@@ -685,14 +691,14 @@ button:active:not(:disabled) {
 
 .spinner {
   display: inline-block;
-  width: 18px;
-  height: 18px;
+  width: 1.125rem;
+  height: 1.125rem;
   border: 3px solid var(--border);
   border-top-color: var(--accent);
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
   vertical-align: middle;
-  margin-right: 6px;
+  margin-right: 0.375rem;
 }
 
 @keyframes spin {
@@ -716,4 +722,279 @@ button:active:not(:disabled) {
   .coord-file { width: 44px; }
   .sq.legal-target::after           { width: 18px; height: 18px; }
   .sq.legal-target.has-piece::after { width: 40px; height: 40px; }
+}
+
+/* ── Room / Game pages ─────────────────────────────────────────── */
+
+body.room-game-bg {
+  background-color: #0d0718;
+  background-image: url('../img/room_game_background.png');
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  overflow: auto;
+}
+
+/* Navbar */
+body.room-game-bg .navbar {
+  background: transparent;
+  border-bottom: none;
+}
+
+body.room-game-bg .navbar .username {
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(0.32rem, 0.5vw, 0.44rem);
+  color: #b99bd6;
+}
+
+body.room-game-bg .nav-right {
+  background: rgba(8, 3, 18, 0.78);
+  backdrop-filter: blur(10px);
+  border: 2px solid #7b4ca0;
+  border-radius: 999px;
+  padding: 0.45rem 0.9rem;
+  gap: 0.9rem;
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.4);
+}
+
+/* Buttons */
+body.room-game-bg .btn-primary {
+  background: #f3dfbd;
+  color: #21122f;
+  border: 3px solid #21122f;
+  border-radius: 0.625rem;
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(0.38rem, 0.6vw, 0.52rem);
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.75rem 1.1rem;
+  box-shadow:
+    4px 4px 0 #21122f,
+    inset 0 2px 0 rgba(255, 255, 255, 0.35);
+}
+
+body.room-game-bg .btn-primary:hover:not(:disabled) {
+  background: #fff0cf;
+  box-shadow:
+    4px 4px 0 #21122f,
+    inset 0 2px 0 rgba(255, 255, 255, 0.5),
+    0 0 14px rgba(208, 155, 61, 0.35);
+}
+
+body.room-game-bg .btn-primary:active:not(:disabled) {
+  transform: translate(3px, 3px);
+  box-shadow: 1px 1px 0 #21122f;
+}
+
+body.room-game-bg .btn-primary:disabled {
+  background: #c9b898;
+  color: #5a4a2e;
+  box-shadow: 3px 3px 0 #21122f;
+  opacity: 0.65;
+}
+
+body.room-game-bg .btn-secondary {
+  background: rgba(10, 4, 22, 0.8);
+  border: 2px solid #7b4ca0;
+  color: #e2ceff;
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(0.36rem, 0.58vw, 0.5rem);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.9rem;
+  box-shadow: 2px 2px 0 #21122f;
+}
+
+body.room-game-bg .btn-secondary:hover:not(:disabled) {
+  background: rgba(123, 76, 160, 0.22);
+}
+
+body.room-game-bg .btn-danger {
+  background: rgba(80, 10, 10, 0.85);
+  color: #ffb4b4;
+  border: 2px solid #a03030;
+  border-radius: 0.5rem;
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(0.33rem, 0.52vw, 0.44rem);
+  padding: 0.5rem 0.9rem;
+  box-shadow: 2px 2px 0 #21122f;
+}
+
+body.room-game-bg .btn-danger:hover:not(:disabled) {
+  background: rgba(120, 20, 20, 0.9);
+}
+
+/* Section heading */
+body.room-game-bg .rooms-header h2 {
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(0.5rem, 0.9vw, 0.75rem);
+  color: #e2ceff;
+  letter-spacing: 0.06em;
+}
+
+/* Cards */
+body.room-game-bg .card {
+  background: rgba(8, 3, 18, 0.82);
+  border: 3px solid #7b4ca0;
+  border-radius: 0.75rem;
+  box-shadow:
+    inset 2px 2px 0 #1a0d30,
+    inset -1px -1px 0 #3d1f6e,
+    4px 4px 0 rgba(0, 0, 0, 0.55);
+}
+
+body.room-game-bg .my-game-card {
+  border-color: #c07030;
+  background: rgba(40, 18, 4, 0.82);
+}
+
+body.room-game-bg .section-title {
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(0.38rem, 0.62vw, 0.52rem);
+  color: #b99bd6;
+  letter-spacing: 0.08em;
+}
+
+/* Table */
+body.room-game-bg .room-table th {
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(0.28rem, 0.48vw, 0.4rem);
+  letter-spacing: 0.05em;
+  color: #b99bd6;
+  border-bottom: 2px solid #7b4ca0;
+}
+
+body.room-game-bg .room-table td {
+  font-family: 'VT323', monospace;
+  font-size: clamp(0.9rem, 1.4vw, 1.2rem);
+  color: #e2ceff;
+  border-bottom: 1px solid #2e1558;
+}
+
+body.room-game-bg .room-table tbody tr:hover {
+  background: rgba(123, 76, 160, 0.12);
+}
+
+/* Status badges */
+body.room-game-bg .status-badge {
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(0.26rem, 0.42vw, 0.36rem);
+  border-radius: 0.25rem;
+}
+
+/* Messages */
+body.room-game-bg .msg {
+  font-family: 'VT323', monospace;
+  font-size: clamp(0.9rem, 1.3vw, 1.1rem);
+  border-width: 2px;
+  border-radius: 0.25rem;
+}
+
+body.room-game-bg .msg-error {
+  background: rgba(120, 20, 20, 0.35);
+  border-color: #a03030;
+  color: #ff9999;
+}
+
+body.room-game-bg .msg-info {
+  background: rgba(50, 15, 80, 0.5);
+  border-color: #7b4ca0;
+  color: #c8a8e8;
+}
+
+body.room-game-bg .msg-success {
+  background: rgba(20, 60, 20, 0.4);
+  border-color: #30a030;
+  color: #99dd99;
+}
+
+/* Players bar */
+body.room-game-bg .players-bar {
+  background: rgba(8, 3, 18, 0.82);
+  border: 3px solid #7b4ca0;
+  border-radius: 0.75rem;
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.55);
+}
+
+body.room-game-bg .player-card.active {
+  border-color: #c07030;
+  background: rgba(192, 112, 48, 0.1);
+}
+
+body.room-game-bg .player-name {
+  font-family: 'VT323', monospace;
+  font-size: clamp(0.9rem, 1.3vw, 1.1rem);
+}
+
+body.room-game-bg .player-color-label {
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(0.28rem, 0.44vw, 0.38rem);
+}
+
+body.room-game-bg .vs-label {
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(0.32rem, 0.52vw, 0.44rem);
+  color: #b99bd6;
+}
+
+/* Status bar */
+body.room-game-bg .status-bar {
+  background: rgba(8, 3, 18, 0.82);
+  border: 3px solid #7b4ca0;
+  border-radius: 0.75rem;
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.55);
+}
+
+body.room-game-bg .status-bar .status-row {
+  border-bottom-color: #2e1558;
+}
+
+body.room-game-bg .status-bar .label {
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(0.28rem, 0.46vw, 0.4rem);
+  color: #b99bd6;
+}
+
+body.room-game-bg .status-bar .value {
+  font-family: 'VT323', monospace;
+  font-size: clamp(0.9rem, 1.3vw, 1.1rem);
+  color: #e2ceff;
+}
+
+/* Banners */
+body.room-game-bg .banner {
+  background: rgba(8, 3, 18, 0.9);
+  border: 3px solid #7b4ca0;
+  border-radius: 0.75rem;
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.55);
+}
+
+body.room-game-bg .banner h3 {
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(0.42rem, 0.75vw, 0.62rem);
+  letter-spacing: 0.04em;
+  line-height: 1.8;
+}
+
+body.room-game-bg .banner p {
+  font-family: 'VT323', monospace;
+  font-size: clamp(0.9rem, 1.3vw, 1.1rem);
+  color: #b99bd6;
+}
+
+body.room-game-bg #disconnect-banner {
+  border-color: #c07030;
+}
+
+body.room-game-bg #disconnect-banner h3 {
+  color: #f3a050;
+}
+
+/* Chessboard border */
+body.room-game-bg #chessboard {
+  border: 3px solid #7b4ca0;
+  box-shadow: 0 0 0 2px #21122f, 4px 4px 0 rgba(0, 0, 0, 0.55);
 }
