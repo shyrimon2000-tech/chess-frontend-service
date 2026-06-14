@@ -4,9 +4,13 @@ if (!localStorage.getItem('access_token')) {
 }
 
 // ── Constants ─────────────────────────────────────────────────
-var PIECE_UNICODE = {
-  K: '♔', Q: '♕', R: '♖', B: '♗', N: '♘', P: '♙',
-  k: '♚', q: '♛', r: '♜', b: '♝', n: '♞', p: '♟'
+var PIECE_IMG = {
+  K: 'img/chess/light_king.png',   Q: 'img/chess/light_queen.png',
+  R: 'img/chess/light_rook.png',   B: 'img/chess/light_bishop.png',
+  N: 'img/chess/light_knight.png', P: 'img/chess/light_pawn.png',
+  k: 'img/chess/dark_king.png',    q: 'img/chess/dark_queen.png',
+  r: 'img/chess/dark_rook.png',    b: 'img/chess/dark_bishop.png',
+  n: 'img/chess/dark_knight.png',  p: 'img/chess/dark_pawn.png',
 };
 
 // ── State ─────────────────────────────────────────────────────
@@ -226,8 +230,12 @@ function renderBoard(fen) {
       sq.dataset.sq    = sqName;
       sq.dataset.piece = piece || '';
 
-      if (piece) {
-        sq.innerHTML = '<span class="piece">' + (PIECE_UNICODE[piece] || piece) + '</span>';
+      if (piece && PIECE_IMG[piece]) {
+        var img = document.createElement('img');
+        img.src = PIECE_IMG[piece];
+        img.className = 'piece';
+        img.draggable = false;
+        sq.appendChild(img);
         sq.classList.add('has-piece');
       }
 

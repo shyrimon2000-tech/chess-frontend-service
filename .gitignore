@@ -2,5 +2,4 @@
 __pycache__/
 screenshots/
 test_browser.py
-tests/.reg_times.json
-tests/debug_ws.py
+tests/
