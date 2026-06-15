@@ -2,11 +2,12 @@ name: CI
 
 on:
   push:
-    branches: [main, dev]
+    branches: [dev]
     tags:
-      - '[0-9]+.[0-9]+.[0-9]+'
+      - '[0-9]+\.[0-9]+\.[0-9]+'
   pull_request:
-    branches: [main, dev]
+    branches: [main]
+  workflow_dispatch:
 
 jobs:
   docker-build:
@@ -20,6 +21,15 @@ jobs:
       - name: Build Docker image
         run: docker build -t chess-frontend-service .
 
+      - name: Save Docker image
+        run: docker save chess-frontend-service | gzip > image.tar.gz
+
+      - name: Upload Docker image artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: docker-image
+          path: image.tar.gz
+
   publish:
     name: Publish Docker image
     runs-on: ubuntu-latest
@@ -31,8 +41,13 @@ jobs:
       packages: write
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - name: Download Docker image artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: docker-image
+
+      - name: Load Docker image
+        run: docker load < image.tar.gz
 
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v3
@@ -45,9 +60,7 @@ jobs:
         id: version
         run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
 
-      - name: Build and push
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          push: true
-          tags: ghcr.io/shyrimon2000-tech/chess-frontend-service:${{ steps.version.outputs.VERSION }}
+      - name: Tag and push
+        run: |
+          docker tag chess-frontend-service ghcr.io/shyrimon2000-tech/chess-frontend-service:${{ steps.version.outputs.VERSION }}
+          docker push ghcr.io/shyrimon2000-tech/chess-frontend-service:${{ steps.version.outputs.VERSION }}
