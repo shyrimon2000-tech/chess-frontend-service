@@ -6,6 +6,14 @@ Vanilla HTML/CSS/JS — no frameworks, no build step. Served as static files by 
 
 ---
 
+## Badges
+
+Dev: [![CI Dev](https://github.com/shyrimon2000-tech/chess-frontend-service/actions/workflows/ci.yml/badge.svg?branch=dev)](https://github.com/shyrimon2000-tech/chess-frontend-service/actions)
+
+Pull Request: [![CI PR](https://github.com/shyrimon2000-tech/chess-frontend-service/actions/workflows/ci.yml/badge.svg?event=pull_request)](https://github.com/shyrimon2000-tech/chess-frontend-service/actions)
+
+---
+
 ## Features
 
 - Login and registration with JWT-based authentication
