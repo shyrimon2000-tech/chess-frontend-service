@@ -380,6 +380,10 @@ function showGameOver(game) {
     title = 'Draw!';
     sub   = 'The game ended in a draw.';
     cls   = 'winner-draw';
+  } else if (myColor === 'spectator') {
+    title = (winner.charAt(0).toUpperCase() + winner.slice(1)) + ' wins!';
+    sub   = 'Thanks for watching!';
+    cls   = 'winner-' + winner;
   } else if (winner === myColor) {
     title = 'You win!';
     sub   = 'Congratulations!';
