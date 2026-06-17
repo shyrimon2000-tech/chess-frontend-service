@@ -1,5 +1,8 @@
 .env
+.env.combined
 __pycache__/
+.pytest_cache/
 screenshots/
 test_browser.py
 tests/
+e2e_tests/.reg_times.json
